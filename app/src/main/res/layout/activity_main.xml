@@ -34,7 +34,7 @@
             android:textAllCaps="false"
             app:icon="@drawable/search_light_mode"
             app:iconGravity="textStart"
-            app:iconPadding="2dp"
+            app:iconPadding="1dp"
             app:iconTint="@color/black"
             app:cornerRadius="16dp"/>
 
@@ -51,7 +51,7 @@
             android:textAllCaps="false"
             app:icon="@drawable/media"
             app:iconGravity="textStart"
-            app:iconPadding="2dp"
+            app:iconPadding="1dp"
             app:iconTint="@color/black"
             app:cornerRadius="16dp"/>
 
@@ -68,7 +68,7 @@
             android:textAllCaps="false"
             app:icon="@drawable/settings"
             app:iconGravity="textStart"
-            app:iconPadding="2dp"
+            app:iconPadding="1dp"
             app:iconTint="@color/black"
             app:cornerRadius="16dp"/>
 
