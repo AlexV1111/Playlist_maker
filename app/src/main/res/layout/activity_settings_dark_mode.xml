@@ -14,35 +14,32 @@
         android:gravity="start"
         android:backgroundTint="@color/black"
         android:text="@string/settings"
-        android:textSize="22sp"
+        android:textSize="@dimen/textSize_22"
         android:textColor="@color/white"
         android:textAllCaps="false"
-        android:paddingTop="10dp"
-        android:paddingStart="12dp"
-        android:paddingBottom="12dp"
+        android:padding="12dp"
         android:layout_marginBottom="24dp"/>
 
     <Switch
         android:id="@+id/firstSwitch"
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/height_button_settings"
         android:layout_gravity="start"
         android:backgroundTint="@color/black"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingHorizontal="16dp"
         android:text="@string/switch_mode"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize_16"
         android:thumb="@drawable/knob"
         android:track="@drawable/track"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/height_button_settings"
         android:backgroundTint="@color/black"
         android:text="@string/share_app"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize_16"
         android:gravity="start|center"
         android:textColor="@color/white"
         android:textAllCaps="false"
@@ -52,10 +49,10 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/height_button_settings"
         android:backgroundTint="@color/black"
         android:text="@string/write_to_support"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize_16"
         android:gravity="start|center"
         android:textColor="@color/white"
         android:textAllCaps="false"
@@ -65,10 +62,10 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/height_button_settings"
         android:backgroundTint="@color/black"
         android:text="@string/user_agreement"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize_16"
         android:gravity="start|center"
         android:textColor="@color/white"
         android:textAllCaps="false"
