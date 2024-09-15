@@ -2,83 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_settings"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    style="@style/activity_setting_style">
 
     <Button
+        style="@style/ButtonStyle_activity_settings"
         android:id="@+id/back_to_activity_main_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:backgroundTint="@color/white"
         android:text="@string/settings"
         android:textSize="@dimen/textSize_22"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
         android:padding="12dp"
         android:layout_marginBottom="24dp"
         android:stateListAnimator="@null"
         app:icon="@drawable/arrow"
         app:iconGravity="textStart"
-        app:iconPadding="12dp"
-        app:iconTint="@color/black"/>
+        app:iconPadding="12dp"/>
 
     <Switch
+        style="@style/ButtonStyle_activity_settings"
         android:id="@+id/firstSwitch"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_button_settings"
-        android:layout_gravity="start"
         android:track="@drawable/track"
         android:thumb="@drawable/knob"
         android:text="@string/switch_mode"
-        android:paddingHorizontal="16dp"
-        android:textSize="@dimen/textSize_16"
-        android:textColor="@color/black"
         tools:ignore="UseSwitchCompatOrMaterialXml"/>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_button_settings"
-        android:backgroundTint="@color/white"
+        style="@style/ButtonStyle_activity_settings"
         android:text="@string/share_app"
-        android:textSize="@dimen/textSize_16"
-        android:gravity="start|center"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:stateListAnimator="@null"
-        app:icon="@drawable/share"
-        app:iconGravity="end"
-        app:iconTint="@color/aluminium_snow"/>
+        app:icon="@drawable/share"/>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_button_settings"
-        android:backgroundTint="@color/white"
+        style="@style/ButtonStyle_activity_settings"
         android:text="@string/write_to_support"
-        android:textSize="@dimen/textSize_16"
-        android:gravity="start|center"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:stateListAnimator="@null"
-        app:icon="@drawable/support"
-        app:iconGravity="end"
-        app:iconTint="@color/aluminium_snow"/>
+        app:icon="@drawable/support"/>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_button_settings"
-        android:backgroundTint="@color/white"
+        style="@style/ButtonStyle_activity_settings"
         android:text="@string/user_agreement"
-        android:textSize="@dimen/textSize_16"
-        android:gravity="start|center"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:stateListAnimator="@null"
-        app:icon="@drawable/arrow_forward"
-        app:iconGravity="end"
-        app:iconTint="@color/aluminium_snow"/>
+        app:icon="@drawable/arrow_forward"/>
 
     </LinearLayout>
