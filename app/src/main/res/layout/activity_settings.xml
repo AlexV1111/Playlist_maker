@@ -2,11 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/activity_setting_style">
+    style="@style/activity_setting_style"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
         style="@style/titleButtonStyle"
         android:id="@+id/back_to_activity_main_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button_settings"
         android:text="@string/settings"
         android:textSize="@dimen/textSize_22"
         android:padding="12dp"
@@ -19,6 +24,8 @@
     <Switch
         style="@style/ButtonStyle_activity_settings"
         android:id="@+id/firstSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button_settings"
         android:track="@drawable/track"
         android:thumb="@drawable/knob"
         android:text="@string/switch_mode"
@@ -27,18 +34,24 @@
     <Button
         style="@style/ButtonStyle_activity_settings"
         android:id="@+id/share_app_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button_settings"
         android:text="@string/share_app"
         app:icon="@drawable/share"/>
 
     <Button
         style="@style/ButtonStyle_activity_settings"
         android:id="@+id/write_to_support_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button_settings"
         android:text="@string/write_to_support"
         app:icon="@drawable/support"/>
 
     <Button
         style="@style/ButtonStyle_activity_settings"
         android:id="@+id/user_agreement_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button_settings"
         android:text="@string/user_agreement"
         app:icon="@drawable/arrow_forward"/>
 

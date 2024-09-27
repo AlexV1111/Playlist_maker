@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/activity_main_style">
+    style="@style/activity_main_style"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
+        style="@style/title_activity_main_style"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:paddingTop="10dp"
-        android:text="@string/playlist_maker"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textSize_22"
-        android:fontFamily="@font/ys_display_medium"
-        android:textFontWeight="500"/>
+        android:text="@string/playlist_maker"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,18 +21,30 @@
         <Button
             style="@style/ButtonStyle_activity_main"
             android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/verticalMargin_button"
             android:text="@string/search"
             app:icon="@drawable/search_light_mode"/>
 
         <Button
             style="@style/ButtonStyle_activity_main"
             android:id="@+id/media_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/verticalMargin_button"
             android:text="@string/media"
             app:icon="@drawable/media"/>
 
         <Button
             style="@style/ButtonStyle_activity_main"
             android:id="@+id/settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/verticalMargin_button"
             android:text="@string/settings"
             app:icon="@drawable/settings"/>
     </LinearLayout>

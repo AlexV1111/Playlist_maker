@@ -18,8 +18,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val backToActivityMainButton = findViewById<Button>(R.id.back_to_activity_main_button)
         backToActivityMainButton.setOnClickListener {
-            val backToActivityMainButtonIntent = Intent(this, MainActivity::class.java)
-            startActivity(backToActivityMainButtonIntent)
+            finish()
         }
 
         val shareAppButton = findViewById<Button>(R.id.share_app_button)

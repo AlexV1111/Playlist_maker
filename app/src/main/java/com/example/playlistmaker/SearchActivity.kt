@@ -28,8 +28,7 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
 
         searchBackButton.setOnClickListener {
-            val searchBackButtonIntent = Intent(this, MainActivity::class.java)
-            startActivity(searchBackButtonIntent)
+            finish()
         }
 
         clearButton.setOnClickListener {
