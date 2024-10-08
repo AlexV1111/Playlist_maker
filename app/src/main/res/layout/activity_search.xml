@@ -1,7 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/activity_setting_style"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        style="@style/titleButtonStyle"
+        android:id="@+id/search_back_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button_settings"
+        android:text="@string/search"
+        android:textSize="@dimen/textSize_22"
+        android:padding="12dp"
+        android:stateListAnimator="@null"
+        app:icon="@drawable/arrow"
+        app:iconGravity="textStart"
+        app:iconPadding="24dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="horizontal"
+        android:background="@drawable/search_field">
+
+        <EditText
+            android:id="@+id/inputEditText"
+            style="style/ButtonStyle_activity_settings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|end"
+            android:background="@color/marble"
+            android:drawableStart="@drawable/search_icon"
+            android:drawablePadding="8dp"
+            android:hint="@string/search"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="12dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:src="@drawable/clear_icon"
+            android:paddingEnd="8dp"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
 </LinearLayout>
