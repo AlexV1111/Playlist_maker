@@ -5,7 +5,9 @@
     <dimen name="height_button_settings">64dp</dimen>
     <dimen name="textSize_22">22sp</dimen>
     <dimen name="textSize_16">16sp</dimen>
+    <dimen name="trackSize_12">12sp</dimen>
 
     <dimen name="searchSize">36dp</dimen>
     <dimen name="cornerRadius_search">8dp</dimen>
+
 </resources>

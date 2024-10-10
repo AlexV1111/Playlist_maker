@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/activity_setting_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,8 +53,15 @@
             android:layout_gravity="center|end"
             android:src="@drawable/clear_icon"
             android:paddingEnd="8dp"
-            android:visibility="gone"/>
-
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry" />
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_track"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="16dp">
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
