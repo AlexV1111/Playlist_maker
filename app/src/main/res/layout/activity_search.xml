@@ -24,13 +24,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="@dimen/horizontalMargin"
         android:orientation="horizontal"
         android:background="@drawable/search_field">
 
         <EditText
             android:id="@+id/inputEditText"
-            style="style/ButtonStyle_activity_settings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center|end"
