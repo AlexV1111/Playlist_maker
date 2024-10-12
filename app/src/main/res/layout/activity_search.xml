@@ -29,11 +29,11 @@
         android:background="@drawable/search_field">
 
         <EditText
+            style="@style/search_bar_style"
             android:id="@+id/inputEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center|end"
-            android:background="@color/marble"
             android:drawableStart="@drawable/search_icon"
             android:drawablePadding="8dp"
             android:hint="@string/search"
@@ -41,9 +41,7 @@
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="12dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/grey" />
+            android:singleLine="true"/>
 
         <ImageView
             android:id="@+id/clearIcon"

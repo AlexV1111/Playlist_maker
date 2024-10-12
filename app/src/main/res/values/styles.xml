@@ -72,5 +72,13 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="search_bar_style">
+        <item name="android:background">@color/marble</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
 </resources>
 
