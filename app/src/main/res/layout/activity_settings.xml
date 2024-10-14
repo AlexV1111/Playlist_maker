@@ -8,18 +8,15 @@
     android:orientation="vertical">
 
     <Button
-        style="@style/titleButtonStyle"
+        style="@style/titleStyle"
         android:id="@+id/back_to_activity_main_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_button_settings"
         android:text="@string/settings"
-        android:textSize="@dimen/textSize_22"
         android:padding="12dp"
         android:layout_marginBottom="24dp"
         android:stateListAnimator="@null"
-        app:icon="@drawable/arrow"
-        app:iconGravity="textStart"
-        app:iconPadding="12dp"/>
+        app:icon="@drawable/arrow" />
 
     <Switch
         style="@style/ButtonStyle_activity_settings"
