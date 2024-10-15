@@ -2,10 +2,16 @@
 <resources>
     <dimen name="cornerRadius_button">16dp</dimen>
     <dimen name="verticalMargin_button">16dp</dimen>
+    <dimen name="horizontalMargin">16dp</dimen>
+    <dimen name="horizontalMargin_4">4dp</dimen>
     <dimen name="height_button_settings">64dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
+
     <dimen name="textSize_22">22sp</dimen>
     <dimen name="textSize_16">16sp</dimen>
+    <dimen name="trackSize_11">11sp</dimen>
 
     <dimen name="searchSize">36dp</dimen>
     <dimen name="cornerRadius_search">8dp</dimen>
+
 </resources>

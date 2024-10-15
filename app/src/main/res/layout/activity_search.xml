@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/activity_setting_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <Button
-        style="@style/titleButtonStyle"
         android:id="@+id/search_back_button"
+        style="@style/titleStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_button_settings"
-        android:text="@string/search"
-        android:textSize="@dimen/textSize_22"
+        android:layout_marginHorizontal="@dimen/horizontalMargin_4"
         android:padding="12dp"
         android:stateListAnimator="@null"
-        app:icon="@drawable/arrow"
-        app:iconGravity="textStart"
-        app:iconPadding="24dp"/>
+        android:text="@string/search"
+        app:icon="@drawable/arrow"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:orientation="horizontal"
-        android:background="@drawable/search_field">
+        android:layout_marginHorizontal="@dimen/horizontalMargin"
+        android:background="@drawable/search_field"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/inputEditText"
-            style="style/ButtonStyle_activity_settings"
+            style="@style/search_bar_style"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center|end"
-            android:background="@color/marble"
             android:drawableStart="@drawable/search_icon"
             android:drawablePadding="8dp"
             android:hint="@string/search"
@@ -41,19 +38,23 @@
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="12dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/grey" />
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"
-            android:src="@drawable/clear_icon"
             android:paddingEnd="8dp"
-            android:visibility="gone"/>
-
+            android:src="@drawable/clear_icon"
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry" />
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_track"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="16dp"></androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

@@ -16,6 +16,21 @@
 
     <style name="activity_setting_style">
         <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="titleStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textSize">@dimen/textSize_22</item>
+        <item name="android:gravity">start|center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="iconTint">@color/black</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/padding_24</item>
     </style>
 
     <style name="titleButtonStyle" parent="Widget.MaterialComponents.Button">
@@ -56,4 +71,29 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
     </style>
+
+    <style name="track_description_style">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textSize">@dimen/trackSize_11</item>
+        <item name="android:textColor">@color/aluminium_snow</item>
+        <item name="tint">@color/aluminium_snow</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="track_item_style">
+        <item name="android:paddingHorizontal">@dimen/horizontalMargin</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="search_bar_style">
+        <item name="android:background">@color/marble</item>
+        <item name="android:textSize">@dimen/textSize_16</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
 </resources>
+
