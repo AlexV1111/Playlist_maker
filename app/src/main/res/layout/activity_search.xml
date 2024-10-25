@@ -16,7 +16,7 @@
         android:padding="12dp"
         android:stateListAnimator="@null"
         android:text="@string/search"
-        app:icon="@drawable/arrow"/>
+        app:icon="@drawable/arrow" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -51,10 +51,25 @@
             tools:ignore="RtlSymmetry" />
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_track"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="16dp"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_track"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="16dp">
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            style="@style/placeHolderStyle"
+            android:id="@+id/placeholderMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"/>
+
+    </FrameLayout>
 
 </LinearLayout>
