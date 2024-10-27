@@ -10,6 +10,7 @@
     <dimen name="textSize_22">22sp</dimen>
     <dimen name="textSize_19">19sp</dimen>
     <dimen name="textSize_16">16sp</dimen>
+    <dimen name="textSize_14">14sp</dimen>
     <dimen name="trackSize_11">11sp</dimen>
 
     <dimen name="searchSize">36dp</dimen>

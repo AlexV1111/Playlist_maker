@@ -30,7 +30,7 @@ class ViewHolderTrack(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         trackNameView.text = data.trackName
         artistNameView.text = data.artistName
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(data.trackTime)
+        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(data.trackTimeMillis)
     }
 
     private fun dpToPx(dp: Float, context: Context): Int {

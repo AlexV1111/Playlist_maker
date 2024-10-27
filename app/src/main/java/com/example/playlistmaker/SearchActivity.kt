@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -40,12 +42,15 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchBackButton: Button
     private lateinit var inputEditText: EditText
     private lateinit var clearButton: ImageView
-    private lateinit var placeholderMessage: TextView
     private lateinit var recyclerViewTrack: RecyclerView
 
-    private val tracks = ArrayList<Track>()
-    private val trackAdapter = AdapterTrack(arrayListOf())
+    private lateinit var placeholder: LinearLayout
+    private lateinit var placeHolderImage: ImageView
+    private lateinit var placeholderMessage: TextView
+    private lateinit var updateBtn: Button
 
+    private val tracks = ArrayList<Track>()
+    private val trackAdapter = AdapterTrack()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +59,17 @@ class SearchActivity : AppCompatActivity() {
         searchBackButton = findViewById(R.id.search_back_button)
         inputEditText = findViewById(R.id.inputEditText)
         clearButton = findViewById(R.id.clearIcon)
-        placeholderMessage = findViewById(R.id.placeholderMessage)
 
         recyclerViewTrack = findViewById(R.id.rv_track)
+
+        placeholder = findViewById(R.id.placeHolder)
+        placeHolderImage = findViewById(R.id.placeHolderImage)
+        placeholderMessage = findViewById(R.id.placeholderMessage)
+        updateBtn = findViewById(R.id.updateBtn)
+
+
+        trackAdapter.listTrack = tracks
+
         recyclerViewTrack.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewTrack.setHasFixedSize(true)
@@ -68,6 +81,12 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            tracks.clear()
+            trackAdapter.notifyDataSetChanged()
+        }
+
+        updateBtn.setOnClickListener {
+            startService(inputEditText.text.toString())
         }
 
         inputEditText.addTextChangedListener(object : TextWatcher {
@@ -84,7 +103,14 @@ class SearchActivity : AppCompatActivity() {
 
         })
 
-        searchInput()
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (inputEditText.text.isNotEmpty()) {
+                    startService(inputEditText.text.toString())
+                }
+            }
+            false
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -103,64 +129,60 @@ class SearchActivity : AppCompatActivity() {
         } else View.VISIBLE
     }
 
-    private fun startService(inputEditText: String) {
-        iTunesService.searchTrack(inputEditText).enqueue(object : Callback<TrackResponse> {
-            override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
-                if (response.code() == 200) {
+    private fun startService(inputEditText: String){
+        iTunesService.searchTrack(inputEditText).enqueue(object :
+            Callback<TrackResponse> {
+
+            var responseCode = 0
+
+            override fun onResponse(
+                call: Call<TrackResponse>,
+                response: Response<TrackResponse>
+            ) {
+
+                responseCode = response.code()
+
+                if (responseCode == 200) {
                     tracks.clear()
                     if (response.body()?.results?.isNotEmpty() == true) {
                         tracks.addAll(response.body()?.results!!)
                         trackAdapter.notifyDataSetChanged()
                     }
-                    if (tracks.isEmpty()) {
-                        showMessage(getString(R.string.nothing_found), "")
-                    } else {
-                        showMessage("", "")
-                    }
-                } else {
-                    showMessage(
-                        getString(R.string.something_went_wrong),
-                        response.code().toString()
+                    if (tracks.isEmpty()) showMessage(
+                        getString(R.string.nothing_found),
+                        response.code()
                     )
-                }
+                } else showMessage(
+                    getString(R.string.something_went_wrong),
+                    response.code()
+                )
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                showMessage(getString(R.string.something_went_wrong), t.message.toString())
+                showMessage(getString(R.string.something_went_wrong), responseCode)
             }
         })
     }
 
-    private fun showMessage(text: String, additionalMessage: String) {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun showMessage(text: String, responseCode: Int) {
         if (text.isNotEmpty()) {
-            placeholderMessage.visibility = View.VISIBLE
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
+
+            placeHolderImage.visibility = View.VISIBLE
+            placeholderMessage.visibility = View.VISIBLE
+            updateBtn.visibility = View.VISIBLE
+
+
             placeholderMessage.text = text
 
-            if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                    .show()
-            }
+            if (responseCode == 200) {
+                placeHolderImage.setImageDrawable(getDrawable(R.drawable.nothing_found_image))
+                updateBtn.visibility = View.GONE
+            } else placeHolderImage.setImageDrawable(getDrawable(R.drawable.connection_error))
 
-        } else {
-            placeholderMessage.visibility = View.GONE
-        }
+        } else placeholder.visibility = View.GONE
     }
 
-    fun searchInput() {
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (inputEditText.text.isNotEmpty()){
-                    startService(inputEditText.text.toString())
-                }
-                else{
-                    tracks.clear()
-                    trackAdapter.notifyDataSetChanged()
-                }
-                true
-            }
-            false
-        }
-    }
 }

@@ -91,6 +91,16 @@
         <item name="android:textFontWeight">400</item>
     </style>
 
+    <style name="updateBtnStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="cornerRadius">54dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/textSize_14</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+
     <style name="placeHolderStyle">
         <item name="android:backgroundTint">@color/black</item>
         <item name="android:textSize">@dimen/textSize_19</item>
