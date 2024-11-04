@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -11,7 +12,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -81,6 +81,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            placeholder.visibility = View.GONE
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
         }
@@ -129,20 +130,18 @@ class SearchActivity : AppCompatActivity() {
         } else View.VISIBLE
     }
 
-    private fun startService(inputEditText: String){
+    private fun startService(inputEditText: String) {
         iTunesService.searchTrack(inputEditText).enqueue(object :
             Callback<TrackResponse> {
 
-            var responseCode = 0
 
             override fun onResponse(
                 call: Call<TrackResponse>,
                 response: Response<TrackResponse>
             ) {
 
-                responseCode = response.code()
+                if (response.code() == 200) {
 
-                if (responseCode == 200) {
                     tracks.clear()
                     if (response.body()?.results?.isNotEmpty() == true) {
                         tracks.addAll(response.body()?.results!!)
@@ -150,25 +149,30 @@ class SearchActivity : AppCompatActivity() {
                     }
                     if (tracks.isEmpty()) showMessage(
                         getString(R.string.nothing_found),
-                        response.code()
+                        true
                     )
-                } else showMessage(
-                    getString(R.string.something_went_wrong),
-                    response.code()
-                )
+                } else {
+                    showMessage(
+                        getString(R.string.nothing_found),
+                        true
+                    )
+                }
             }
 
             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                showMessage(getString(R.string.something_went_wrong), responseCode)
+                showMessage(getString(R.string.something_went_wrong), false)
             }
         })
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun showMessage(text: String, responseCode: Int) {
+    private fun showMessage(text: String, connectType: Boolean) {
+
         if (text.isNotEmpty()) {
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
+
+            placeholder.visibility = View.VISIBLE
 
             placeHolderImage.visibility = View.VISIBLE
             placeholderMessage.visibility = View.VISIBLE
@@ -177,12 +181,15 @@ class SearchActivity : AppCompatActivity() {
 
             placeholderMessage.text = text
 
-            if (responseCode == 200) {
+            if (connectType) {
                 placeHolderImage.setImageDrawable(getDrawable(R.drawable.nothing_found_image))
                 updateBtn.visibility = View.GONE
-            } else placeHolderImage.setImageDrawable(getDrawable(R.drawable.connection_error))
+            } else {
+                placeHolderImage.setImageDrawable(getDrawable(R.drawable.connection_error))
+            }
 
         } else placeholder.visibility = View.GONE
+
     }
 
 }

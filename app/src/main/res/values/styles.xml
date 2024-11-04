@@ -88,6 +88,7 @@
 
     <style name="search_bar_style">
         <item name="android:background">@color/marble</item>
+        <item name="android:textCursorDrawable">@drawable/text_cursor</item>
         <item name="android:textSize">@dimen/textSize_16</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorHint">@color/grey</item>
