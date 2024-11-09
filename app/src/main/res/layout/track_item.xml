@@ -16,63 +16,60 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:weightSum="3">
+        android:paddingVertical="6dp">
 
         <TextView
-            style="@style/titleButtonStyle"
             android:id="@+id/trackName"
+            style="@style/track_name_style"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:paddingStart="8dp"
+            android:layout_height="19dp"
+            android:layout_marginBottom="1dp"
             android:ellipsize="end"
             android:maxLines="1"
-            tools:ignore="NestedWeights" />
+            android:paddingStart="8dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="13dp"
             android:orientation="horizontal"
             android:paddingHorizontal="8dp">
 
             <TextView
-                style="@style/track_description_style"
                 android:id="@+id/artistName"
-                android:layout_width="0dp"
+                style="@style/track_description_style"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:layout_gravity="center_vertical" />
+                android:maxLines="1"/>
 
             <ImageView
                 style="@style/track_description_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/dot" />
+                android:layout_weight="0"
+                android:src="@drawable/dot"/>
 
             <TextView
-                style="@style/track_description_style"
                 android:id="@+id/trackTime"
+                style="@style/track_description_style"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:layout_gravity="center_vertical|start" />
+                android:layout_gravity="center_vertical|start"
+                android:layout_weight="0"/>
 
         </LinearLayout>
 
     </LinearLayout>
-
-
+    
     <ImageView
-        style="@style/track_description_style"
         android:id="@+id/arrow_track"
+        style="@style/track_description_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
