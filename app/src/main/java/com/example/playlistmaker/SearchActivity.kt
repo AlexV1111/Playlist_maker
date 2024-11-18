@@ -49,8 +49,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderMessage: TextView
     private lateinit var updateBtn: Button
 
+    private lateinit var searchHistoryTitle: TextView
+    private lateinit var clearHistoryBtn: Button
+
     private val tracks = ArrayList<Track>()
     private val trackAdapter = AdapterTrack()
+
+    private val tracksHistory = ArrayList<Track>()
+    private val trackHistoryAdapter = AdapterTrack()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +73,27 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage = findViewById(R.id.placeholderMessage)
         updateBtn = findViewById(R.id.updateBtn)
 
+        searchHistoryTitle = findViewById(R.id.searchHistoryTitle)
+        clearHistoryBtn = findViewById(R.id.clearHistoryBtn)
+
 
         trackAdapter.listTrack = tracks
+        trackHistoryAdapter.listTrack = tracksHistory
+
+        trackHistoryAdapter.ClickListener { track ->
+            if (tracksHistory.isEmpty()) tracksHistory.add(track)
+            else if (tracksHistory.contains(track)) {
+                val position = tracksHistory.indexOf(track)
+                tracksHistory.removeAt(position)
+                trackHistoryAdapter.notifyItemRangeChanged(position, tracksHistory.size)
+                tracksHistory.add(track)
+            } else if (tracksHistory.size == 10) {
+                tracksHistory.removeAt(9)
+                trackHistoryAdapter.notifyItemRangeChanged(9, tracksHistory.size)
+                tracksHistory.add(track)
+            } else
+                tracksHistory.add(track)
+        }
 
         recyclerViewTrack.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -81,28 +106,52 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            inputEditText.clearFocus()
             placeholder.visibility = View.GONE
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
+        }
+
+        clearHistoryBtn.setOnClickListener {
+            inputEditText.setText("")
+            inputEditText.clearFocus()
+            searchHistoryTitle.visibility = View.GONE
+            clearHistoryBtn.visibility = View.GONE
+            tracksHistory.clear()
+            trackHistoryAdapter.notifyDataSetChanged()
         }
 
         updateBtn.setOnClickListener {
             startService(inputEditText.text.toString())
         }
 
-        inputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        inputEditText.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (inputEditText.hasFocus() && s?.isEmpty() == true) {
+                        searchHistoryTitle.visibility = View.VISIBLE
+                        clearHistoryBtn.visibility = View.VISIBLE
+                    }
+                    else{
+                        searchHistoryTitle.visibility = View.GONE
+                        clearHistoryBtn.visibility = View.GONE
+                    }
+                }
 
-            override fun afterTextChanged(s: Editable?) {
-                clearButton.visibility = clearButtonVisibility(s)
-                inputText = s.toString()
-            }
+                override fun afterTextChanged(s: Editable?) {
+                    clearButton.visibility = clearButtonVisibility(s)
+                    inputText = s.toString()
+                }
 
-        })
+            })
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
