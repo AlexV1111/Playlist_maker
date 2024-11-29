@@ -117,6 +117,7 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.clearFocus()
             searchHistoryTitle.visibility = View.GONE
             clearHistoryBtn.visibility = View.GONE
+//            clearHistory()
             tracksHistory.clear()
             trackHistoryAdapter.notifyDataSetChanged()
         }
