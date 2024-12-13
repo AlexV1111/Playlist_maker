@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+const val TRACK_HISTORY_KEY = "track_history_key"
+const val NEW_TRACK_KEY = "key_for_track_history"
 
 class SearchActivity : AppCompatActivity() {
 
@@ -43,15 +47,25 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var inputEditText: EditText
     private lateinit var clearButton: ImageView
     private lateinit var recyclerViewTrack: RecyclerView
+    private lateinit var recyclerViewTrackHistory: RecyclerView
 
     private lateinit var placeholder: LinearLayout
     private lateinit var placeHolderImage: ImageView
     private lateinit var placeholderMessage: TextView
     private lateinit var updateBtn: Button
 
-    private val tracks = ArrayList<Track>()
-    private val trackAdapter = AdapterTrack()
+    private lateinit var searchHistoryTitle: TextView
+    private lateinit var clearHistoryBtn: Button
 
+    private val tracks = mutableListOf<Track>()
+    private lateinit var trackAdapter: AdapterTrack
+
+    private val trackHistory = mutableListOf<Track>()
+    private lateinit var trackHistoryAdapter: HistoryAdapterTrack
+
+//    val sharedPrefs = getSharedPreferences(TRACK_HISTORY_KEY, MODE_PRIVATE)
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -61,29 +75,81 @@ class SearchActivity : AppCompatActivity() {
         clearButton = findViewById(R.id.clearIcon)
 
         recyclerViewTrack = findViewById(R.id.rv_track)
+        recyclerViewTrackHistory = findViewById(R.id.rv_trackHistory)
 
         placeholder = findViewById(R.id.placeHolder)
         placeHolderImage = findViewById(R.id.placeHolderImage)
         placeholderMessage = findViewById(R.id.placeholderMessage)
         updateBtn = findViewById(R.id.updateBtn)
 
+        searchHistoryTitle = findViewById(R.id.searchHistoryTitle)
+        clearHistoryBtn = findViewById(R.id.clearHistoryBtn)
 
-        trackAdapter.listTrack = tracks
+        val onItemClickListener = object : OnItemClickListener {
+            override fun onItemClick(track: Track) {
+                val position = tracks.indexOf(track)
+
+
+
+                if (trackHistory.size > 9) {
+                    trackHistory.removeAt(0)
+                    trackAdapter.notifyItemRemoved(0)
+                    trackAdapter.notifyItemRangeChanged(0, trackHistory.size)
+                } else{
+
+                }
+                trackHistory.add(track)
+
+                tracks.remove(track)
+                trackAdapter.notifyItemRemoved(position)
+                trackAdapter.notifyItemRangeChanged(position, tracks.size)
+
+                trackHistoryAdapter.notifyDataSetChanged()
+            }
+        }
+
+
+        trackAdapter = AdapterTrack(tracks, onItemClickListener)
 
         recyclerViewTrack.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewTrack.setHasFixedSize(true)
         recyclerViewTrack.adapter = trackAdapter
 
+        trackHistoryAdapter = HistoryAdapterTrack(trackHistory)
+
+        recyclerViewTrackHistory.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerViewTrackHistory.setHasFixedSize(true)
+        recyclerViewTrackHistory.adapter = trackHistoryAdapter
+
+
         searchBackButton.setOnClickListener {
             finish()
         }
 
+        inputEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                searchHistoryTitle.visibility = View.GONE
+                recyclerViewTrackHistory.visibility = View.GONE
+                clearHistoryBtn.visibility = View.GONE
+            }
+        }
+
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            inputEditText.clearFocus()
             placeholder.visibility = View.GONE
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
+        }
+
+
+        clearHistoryBtn.setOnClickListener {
+            trackHistory.clear()
+            trackHistoryAdapter.notifyDataSetChanged()
+            searchHistoryTitle.visibility = View.GONE
+            clearHistoryBtn.visibility = View.GONE
         }
 
         updateBtn.setOnClickListener {
@@ -95,6 +161,12 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (inputEditText.hasFocus() && s?.isEmpty() == true) {
+                    searchHistoryTitle.visibility = View.VISIBLE
+                    recyclerViewTrackHistory.visibility = View.VISIBLE
+                    clearHistoryBtn.visibility = View.VISIBLE
+
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {

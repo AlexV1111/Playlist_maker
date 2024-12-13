@@ -51,9 +51,10 @@
             tools:ignore="RtlSymmetry" />
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_track"
@@ -61,7 +62,37 @@
             android:layout_height="match_parent"
             android:paddingTop="16dp">
         </androidx.recyclerview.widget.RecyclerView>
-    </FrameLayout>
+
+        <TextView
+            style="@style/placeHolderStyle"
+            android:id="@+id/searchHistoryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="42dp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="@string/search_history_title"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_trackHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="16dp"
+            android:visibility="gone">
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Button
+            style="@style/updateBtnStyle"
+            android:id="@+id/clearHistoryBtn"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:text="@string/clear_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/placeHolder"
