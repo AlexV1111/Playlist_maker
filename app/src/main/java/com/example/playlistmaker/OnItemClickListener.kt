@@ -1,5 +1,5 @@
 package com.example.playlistmaker
 
-interface OnItemClickListener {
+fun interface OnItemClickListener {
     fun onItemClick(track: Track)
 }

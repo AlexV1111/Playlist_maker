@@ -22,5 +22,4 @@ class AdapterTrack(
         holder.bind(listTrack[position])
         holder.itemView.setOnClickListener { onItemClickListener.onItemClick(listTrack[holder.adapterPosition]) }
     }
-
 }

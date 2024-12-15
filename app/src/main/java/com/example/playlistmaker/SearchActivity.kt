@@ -144,7 +144,6 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.notifyDataSetChanged()
         }
 
-
         clearHistoryBtn.setOnClickListener {
             trackHistory.clear()
             trackHistoryAdapter.notifyDataSetChanged()
@@ -156,25 +155,30 @@ class SearchActivity : AppCompatActivity() {
             startService(inputEditText.text.toString())
         }
 
-        inputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        inputEditText.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (inputEditText.hasFocus() && s?.isEmpty() == true) {
                     searchHistoryTitle.visibility = View.VISIBLE
                     recyclerViewTrackHistory.visibility = View.VISIBLE
                     clearHistoryBtn.visibility = View.VISIBLE
-
                 }
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                clearButton.visibility = clearButtonVisibility(s)
-                inputText = s.toString()
-            }
+                override fun afterTextChanged(s: Editable?) {
+                    clearButton.visibility = clearButtonVisibility(s)
+                    inputText = s.toString()
+                }
 
-        })
+            })
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
