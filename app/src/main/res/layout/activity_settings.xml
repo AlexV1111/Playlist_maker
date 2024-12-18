@@ -18,15 +18,14 @@
         android:stateListAnimator="@null"
         app:icon="@drawable/arrow" />
 
-    <Switch
-        style="@style/ButtonStyle_activity_settings"
-        android:id="@+id/firstSwitch"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_button_settings"
-        android:track="@drawable/track"
-        android:thumb="@drawable/knob"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher"
+        style="@style/SwitcherStyle"
         android:text="@string/switch_mode"
-        tools:ignore="UseSwitchCompatOrMaterialXml"/>
+        android:layout_gravity="start"
+        android:layout_width="match_parent"
+        app:switchMinWidth="35dp"
+        android:layout_height="@dimen/height_button_settings"/>
 
     <Button
         style="@style/ButtonStyle_activity_settings"
