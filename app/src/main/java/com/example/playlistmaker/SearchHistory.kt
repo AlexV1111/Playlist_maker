@@ -1,25 +1,31 @@
 package com.example.playlistmaker
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 
-class SearchHistory(private val sharedPrefs: SharedPreferences) {
+class SearchHistory(
+    private val sharedPrefs: SharedPreferences
+) {
 
-    private fun clearHistory() {
+    fun clearTrackHistory(trackHistory: MutableList<Track>) {
+        trackHistory.clear()
         sharedPrefs.edit()
             .remove(TRACK_HISTORY_KEY)
             .apply()
     }
 
-    private fun saveTrack(trackHistory: MutableList<Track>) {
+    fun saveTrackHistory(trackHistory: MutableList<Track>) {
         val json = Gson().toJson(trackHistory)
         sharedPrefs.edit()
             .putString(TRACK_HISTORY_KEY, json)
             .apply()
     }
 
-    private fun readTrack(): MutableList<Track> {
-        val json = sharedPrefs.getString(TRACK_HISTORY_KEY, null) ?: return mutableListOf()
-        return ArrayList(Gson().fromJson(json, Array<Track>::class.java).toList())
+    fun readTrackHistory(): MutableList<Track> {
+        return Gson().fromJson(
+            sharedPrefs.getString(TRACK_HISTORY_KEY, null),
+            Array<Track>::class.java
+        ).toMutableList()
     }
 }

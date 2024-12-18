@@ -23,7 +23,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 const val TRACK_HISTORY_KEY = "track_history_key"
-const val NEW_TRACK_KEY = "key_for_track_history"
+const val TRACK_HISTORY_SIZE = 10
 
 class SearchActivity : AppCompatActivity() {
 
@@ -60,10 +60,10 @@ class SearchActivity : AppCompatActivity() {
     private val tracks = mutableListOf<Track>()
     private lateinit var trackAdapter: AdapterTrack
 
-    private val trackHistory = mutableListOf<Track>()
+    private var trackHistory = mutableListOf<Track>()
     private lateinit var trackHistoryAdapter: HistoryAdapterTrack
 
-//    val sharedPrefs = getSharedPreferences(TRACK_HISTORY_KEY, MODE_PRIVATE)
+    private lateinit var history: SearchHistory
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,27 +85,44 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryTitle = findViewById(R.id.searchHistoryTitle)
         clearHistoryBtn = findViewById(R.id.clearHistoryBtn)
 
-        val onItemClickListener = object : OnItemClickListener {
-            override fun onItemClick(track: Track) {
-                val position = tracks.indexOf(track)
+        val sharedPrefs = getSharedPreferences(TRACK_HISTORY_KEY, MODE_PRIVATE)
+        history = SearchHistory(sharedPrefs)
 
+        if (sharedPrefs.getString(TRACK_HISTORY_KEY, null) != null) {
+            trackHistory = history.readTrackHistory()
+            searchHistoryTitle.visibility = View.VISIBLE
+            recyclerViewTrackHistory.visibility = View.VISIBLE
+            clearHistoryBtn.visibility = View.VISIBLE
+        } else {
+            searchHistoryTitle.visibility = View.GONE
+            recyclerViewTrackHistory.visibility = View.GONE
+            clearHistoryBtn.visibility = View.GONE
+        }
 
+        val onItemClickListener = OnItemClickListener { track ->
+            val position = tracks.indexOf(track)
+            val indexDouble = trackHistory.indexOfFirst { it.trackId == track.trackId }
 
-                if (trackHistory.size > 9) {
-                    trackHistory.removeAt(0)
-                    trackAdapter.notifyItemRemoved(0)
-                    trackAdapter.notifyItemRangeChanged(0, trackHistory.size)
-                } else{
-
-                }
-                trackHistory.add(track)
-
-                tracks.remove(track)
-                trackAdapter.notifyItemRemoved(position)
-                trackAdapter.notifyItemRangeChanged(position, tracks.size)
-
-                trackHistoryAdapter.notifyDataSetChanged()
+            if (indexDouble > 0) {
+                trackHistory.removeAt(indexDouble)
+                trackHistoryAdapter.notifyItemRemoved(indexDouble)
+                trackHistoryAdapter.notifyItemRangeChanged(indexDouble, trackHistory.size)
             }
+
+            if (trackHistory.size >= TRACK_HISTORY_SIZE) {
+                trackHistory.removeLast()
+                trackHistoryAdapter.notifyItemRemoved(TRACK_HISTORY_SIZE - 1)
+            }
+
+            trackHistory.add(0, track)
+            trackHistoryAdapter.notifyItemInserted(0)
+            trackHistoryAdapter.notifyItemRangeChanged(0, trackHistory.size)
+
+//            tracks.remove(track)
+//            trackAdapter.notifyItemRemoved(position)
+//            trackAdapter.notifyItemRangeChanged(position, tracks.size)
+
+            trackHistoryAdapter.notifyDataSetChanged()
         }
 
 
@@ -145,7 +162,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryBtn.setOnClickListener {
-            trackHistory.clear()
+            history.clearTrackHistory(trackHistory)
             trackHistoryAdapter.notifyDataSetChanged()
             searchHistoryTitle.visibility = View.GONE
             clearHistoryBtn.visibility = View.GONE
@@ -165,13 +182,13 @@ class SearchActivity : AppCompatActivity() {
                 ) {
                 }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (inputEditText.hasFocus() && s?.isEmpty() == true) {
-                    searchHistoryTitle.visibility = View.VISIBLE
-                    recyclerViewTrackHistory.visibility = View.VISIBLE
-                    clearHistoryBtn.visibility = View.VISIBLE
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (inputEditText.hasFocus() && s?.isEmpty() == true) {
+                        searchHistoryTitle.visibility = View.VISIBLE
+                        recyclerViewTrackHistory.visibility = View.VISIBLE
+                        clearHistoryBtn.visibility = View.VISIBLE
+                    }
                 }
-            }
 
                 override fun afterTextChanged(s: Editable?) {
                     clearButton.visibility = clearButtonVisibility(s)
@@ -187,6 +204,13 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
             false
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (trackHistory.isNotEmpty()) {
+            history.saveTrackHistory(trackHistory)
         }
     }
 
