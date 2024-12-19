@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+const val TRACK_HISTORY_KEY = "track_history_key"
+const val TRACK_HISTORY_SIZE = 10
 
 class SearchActivity : AppCompatActivity() {
 
@@ -43,6 +47,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var inputEditText: EditText
     private lateinit var clearButton: ImageView
     private lateinit var recyclerViewTrack: RecyclerView
+    private lateinit var recyclerViewTrackHistory: RecyclerView
 
     private lateinit var placeholder: LinearLayout
     private lateinit var placeHolderImage: ImageView
@@ -52,12 +57,15 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistoryTitle: TextView
     private lateinit var clearHistoryBtn: Button
 
-    private val tracks = ArrayList<Track>()
-    private val trackAdapter = AdapterTrack()
 
-    private val tracksHistory = ArrayList<Track>()
-    private val trackHistoryAdapter = AdapterTrack()
+    private lateinit var trackAdapter: AdapterTrack
+    private lateinit var trackHistoryAdapter: AdapterTrack
+    private val tracks = mutableListOf<Track>()
+    private var trackHistory = mutableListOf<Track>()
 
+    private lateinit var history: SearchHistory
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -67,6 +75,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton = findViewById(R.id.clearIcon)
 
         recyclerViewTrack = findViewById(R.id.rv_track)
+        recyclerViewTrackHistory = findViewById(R.id.rv_trackHistory)
 
         placeholder = findViewById(R.id.placeHolder)
         placeHolderImage = findViewById(R.id.placeHolderImage)
@@ -76,32 +85,52 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryTitle = findViewById(R.id.searchHistoryTitle)
         clearHistoryBtn = findViewById(R.id.clearHistoryBtn)
 
+        val sharedPrefs = getSharedPreferences(TRACK_HISTORY_KEY, MODE_PRIVATE)
+        history = SearchHistory(sharedPrefs)
 
-        trackAdapter.listTrack = tracks
-        trackHistoryAdapter.listTrack = tracksHistory
-
-        trackHistoryAdapter.ClickListener { track ->
-            if (tracksHistory.isEmpty()) tracksHistory.add(track)
-            else if (tracksHistory.contains(track)) {
-                val position = tracksHistory.indexOf(track)
-                tracksHistory.removeAt(position)
-                trackHistoryAdapter.notifyItemRangeChanged(position, tracksHistory.size)
-                tracksHistory.add(track)
-            } else if (tracksHistory.size == 10) {
-                tracksHistory.removeAt(9)
-                trackHistoryAdapter.notifyItemRangeChanged(9, tracksHistory.size)
-                tracksHistory.add(track)
-            } else
-                tracksHistory.add(track)
+        if (sharedPrefs.getString(TRACK_HISTORY_KEY, null) != null) {
+            trackHistory = history.readTrackHistory()
+            searchHistoryTitle.visibility = View.VISIBLE
+            recyclerViewTrackHistory.visibility = View.VISIBLE
+            clearHistoryBtn.visibility = View.VISIBLE
+        } else {
+            searchHistoryTitle.visibility = View.GONE
+            recyclerViewTrackHistory.visibility = View.GONE
+            clearHistoryBtn.visibility = View.GONE
         }
+
+        val onItemClickListener = OnItemClickListener { track ->
+            history.addTrackToHistory(track, trackHistory)
+            trackHistoryAdapter.notifyItemRangeChanged(0, trackHistory.size)
+            trackHistoryAdapter.notifyDataSetChanged()
+        }
+
+
+        trackAdapter = AdapterTrack(tracks, onItemClickListener)
 
         recyclerViewTrack.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewTrack.setHasFixedSize(true)
         recyclerViewTrack.adapter = trackAdapter
 
+        trackHistoryAdapter = AdapterTrack(trackHistory, onItemClickListener)
+
+        recyclerViewTrackHistory.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerViewTrackHistory.setHasFixedSize(true)
+        recyclerViewTrackHistory.adapter = trackHistoryAdapter
+
+
         searchBackButton.setOnClickListener {
             finish()
+        }
+
+        inputEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                searchHistoryTitle.visibility = View.GONE
+                recyclerViewTrackHistory.visibility = View.GONE
+                clearHistoryBtn.visibility = View.GONE
+            }
         }
 
         clearButton.setOnClickListener {
@@ -113,13 +142,10 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryBtn.setOnClickListener {
-            inputEditText.setText("")
-            inputEditText.clearFocus()
+            history.clearTrackHistory(trackHistory)
+            trackHistoryAdapter.notifyDataSetChanged()
             searchHistoryTitle.visibility = View.GONE
             clearHistoryBtn.visibility = View.GONE
-//            clearHistory()
-            tracksHistory.clear()
-            trackHistoryAdapter.notifyDataSetChanged()
         }
 
         updateBtn.setOnClickListener {
@@ -139,11 +165,8 @@ class SearchActivity : AppCompatActivity() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (inputEditText.hasFocus() && s?.isEmpty() == true) {
                         searchHistoryTitle.visibility = View.VISIBLE
+                        recyclerViewTrackHistory.visibility = View.VISIBLE
                         clearHistoryBtn.visibility = View.VISIBLE
-                    }
-                    else{
-                        searchHistoryTitle.visibility = View.GONE
-                        clearHistoryBtn.visibility = View.GONE
                     }
                 }
 
@@ -161,6 +184,13 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
             false
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (trackHistory.isNotEmpty()) {
+            history.saveTrackHistory(trackHistory)
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
@@ -9,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -20,6 +22,14 @@ class SettingsActivity : AppCompatActivity() {
         backToActivityMainButton.setOnClickListener {
             finish()
         }
+
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        val appContext= applicationContext as App
+        themeSwitcher.isChecked = appContext.readSwitchTheme()
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            appContext.switchTheme(checked)
+        }
+        appContext.saveSwitchTheme()
 
         val shareAppButton = findViewById<Button>(R.id.share_app_button)
         shareAppButton.setOnClickListener {
