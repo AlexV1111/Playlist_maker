@@ -60,7 +60,6 @@
     </style>
 
     <style name="SwitcherStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/white</item>
         <item name="android:textSize">@dimen/textSize_16</item>
         <item name="android:gravity">start|center</item>
         <item name="android:textColor">@color/black</item>

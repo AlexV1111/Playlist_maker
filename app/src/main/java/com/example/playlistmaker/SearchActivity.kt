@@ -57,11 +57,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistoryTitle: TextView
     private lateinit var clearHistoryBtn: Button
 
-    private val tracks = mutableListOf<Track>()
-    private lateinit var trackAdapter: AdapterTrack
 
+    private lateinit var trackAdapter: AdapterTrack
+    private lateinit var trackHistoryAdapter: AdapterTrack
+    private val tracks = mutableListOf<Track>()
     private var trackHistory = mutableListOf<Track>()
-    private lateinit var trackHistoryAdapter: HistoryAdapterTrack
 
     private lateinit var history: SearchHistory
 
@@ -100,28 +100,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val onItemClickListener = OnItemClickListener { track ->
-            val position = tracks.indexOf(track)
-            val indexDouble = trackHistory.indexOfFirst { it.trackId == track.trackId }
-
-            if (indexDouble > 0) {
-                trackHistory.removeAt(indexDouble)
-                trackHistoryAdapter.notifyItemRemoved(indexDouble)
-                trackHistoryAdapter.notifyItemRangeChanged(indexDouble, trackHistory.size)
-            }
-
-            if (trackHistory.size >= TRACK_HISTORY_SIZE) {
-                trackHistory.removeLast()
-                trackHistoryAdapter.notifyItemRemoved(TRACK_HISTORY_SIZE - 1)
-            }
-
-            trackHistory.add(0, track)
-            trackHistoryAdapter.notifyItemInserted(0)
+            history.addTrackToHistory(track, trackHistory)
             trackHistoryAdapter.notifyItemRangeChanged(0, trackHistory.size)
-
-//            tracks.remove(track)
-//            trackAdapter.notifyItemRemoved(position)
-//            trackAdapter.notifyItemRangeChanged(position, tracks.size)
-
             trackHistoryAdapter.notifyDataSetChanged()
         }
 
@@ -133,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerViewTrack.setHasFixedSize(true)
         recyclerViewTrack.adapter = trackAdapter
 
-        trackHistoryAdapter = HistoryAdapterTrack(trackHistory)
+        trackHistoryAdapter = AdapterTrack(trackHistory, onItemClickListener)
 
         recyclerViewTrackHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

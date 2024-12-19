@@ -8,6 +8,13 @@ class SearchHistory(
     private val sharedPrefs: SharedPreferences
 ) {
 
+    fun addTrackToHistory(track: Track, trackHistory: MutableList<Track>) {
+        val indexDouble = trackHistory.indexOfFirst { it.trackId == track.trackId }
+        if (indexDouble > 0) trackHistory.removeAt(indexDouble)
+        if (trackHistory.size >= TRACK_HISTORY_SIZE) trackHistory.removeLast()
+        trackHistory.add(0, track)
+    }
+
     fun clearTrackHistory(trackHistory: MutableList<Track>) {
         trackHistory.clear()
         sharedPrefs.edit()
@@ -16,9 +23,8 @@ class SearchHistory(
     }
 
     fun saveTrackHistory(trackHistory: MutableList<Track>) {
-        val json = Gson().toJson(trackHistory)
         sharedPrefs.edit()
-            .putString(TRACK_HISTORY_KEY, json)
+            .putString(TRACK_HISTORY_KEY, Gson().toJson(trackHistory))
             .apply()
     }
 

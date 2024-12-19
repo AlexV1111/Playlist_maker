@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.gson.Gson
 import kotlin.properties.Delegates
 
-const val THEME_SWITCHER_KEY = "theme_switcher_key"
-const val NEW_SWITCHER_KEY = "new_switcher_key"
+private const val THEME_SWITCHER_KEY = "theme_switcher_key"
+private const val NEW_SWITCHER_KEY = "new_switcher_key"
 
 class App : Application() {
 
