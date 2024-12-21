@@ -38,7 +38,7 @@
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="12dp"
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearIcon"
@@ -56,15 +56,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            style="@style/placeHolderStyle"
-            android:id="@+id/searchHistoryTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="42dp"
-            android:text="@string/search_History_Title"
-            android:visibility="gone"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_track"
             android:layout_width="match_parent"
@@ -72,15 +63,36 @@
             android:paddingTop="16dp">
         </androidx.recyclerview.widget.RecyclerView>
 
-        <Button
-            style="@style/updateBtnStyle"
-            android:id="@+id/clearHistoryBtn"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
-            android:text="@string/clear_History"
+        <TextView
+            android:id="@+id/searchHistoryTitle"
+            style="@style/placeHolderStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:layout_gravity="center"
+            android:paddingTop="42dp"
+            android:text="@string/search_history_title"
+            android:textAlignment="center"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_trackHistory"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:visibility="gone">
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/clearHistoryBtn"
+            style="@style/updateBtnStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/clear_history"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -89,8 +101,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
         android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="100dp"
         android:orientation="vertical">
 
         <ImageView
@@ -98,27 +110,27 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
-            style="@style/placeHolderStyle"
             android:id="@+id/placeholderMessage"
-            android:paddingTop="16dp"
+            style="@style/placeHolderStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:paddingTop="16dp"
             android:textAlignment="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
-            style="@style/updateBtnStyle"
             android:id="@+id/updateBtn"
+            style="@style/updateBtnStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
             android:text="@string/update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
