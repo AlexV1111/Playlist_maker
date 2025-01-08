@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -103,8 +104,11 @@ class SearchActivity : AppCompatActivity() {
             history.addTrackToHistory(track, trackHistory)
             trackHistoryAdapter.notifyItemRangeChanged(0, trackHistory.size)
             trackHistoryAdapter.notifyDataSetChanged()
-        }
 
+            val audioPlayerIntent = Intent(this@SearchActivity, AudioPlayer::class.java)
+            audioPlayerIntent.putExtra(Track::class.simpleName, track)
+            startActivity(audioPlayerIntent)
+        }
 
         trackAdapter = AdapterTrack(tracks, onItemClickListener)
 
