@@ -31,7 +31,9 @@ class AudioPlayer : AppCompatActivity() {
         val audioPlayerBackButton = findViewById<ImageButton>(R.id.audioPlayerBackBtn)
         audioPlayerBackButton.setOnClickListener { finish() }
 
-        val track = intent.getSerializableExtra(Track::class.simpleName) as Track
+        val track = intent.getParcelableExtra<Track>(Track::class.simpleName)
+
+
 
         imageArtWorkView = findViewById(R.id.imageArtWork)
         trackNameView = findViewById(R.id.trackName)
@@ -43,20 +45,22 @@ class AudioPlayer : AppCompatActivity() {
         countryView = findViewById(R.id.country)
 
 
-        Glide.with(imageArtWorkView)
-            .load(track.getCoverArtwork())
-            .centerCrop()
-            .placeholder(R.drawable.placeholder)
-            .transform(RoundedCorners(track.dpToPx(16.0F, imageArtWorkView.context)))
-            .into(imageArtWorkView)
+        if (track != null) {
+            Glide.with(imageArtWorkView)
+                .load(track.getCoverArtwork())
+                .centerCrop()
+                .placeholder(R.drawable.placeholder)
+                .transform(RoundedCorners(track.dpToPx(8.0F, imageArtWorkView.context)))
+                .into(imageArtWorkView)
+        }
 
-        trackNameView.text = track.trackName
-        artistNameView.text = track.artistName
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
-        collectionNameView.text = track.collectionName
-        releaseDateView.text = track.getYearFromReleaseDate()
-        primaryGenreNameView.text = track.primaryGenreName
-        countryView.text = track.country
+        trackNameView.text = track?.trackName
+        artistNameView.text = track?.artistName
+        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track?.trackTimeMillis)
+        collectionNameView.text = track?.collectionName
+        releaseDateView.text = track?.getYearFromReleaseDate()
+        primaryGenreNameView.text = track?.primaryGenreName
+        countryView.text = track?.country
 
     }
 

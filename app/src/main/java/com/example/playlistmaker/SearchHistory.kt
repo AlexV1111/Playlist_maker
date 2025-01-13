@@ -8,7 +8,7 @@ import com.google.gson.Gson
 
 class SearchHistory(
     private val sharedPrefs: SharedPreferences
-) : AppCompatActivity() {
+) {
 
     fun addTrackToHistory(track: Track, trackHistory: MutableList<Track>) {
         val indexDouble = trackHistory.indexOfFirst { it.trackId == track.trackId }
