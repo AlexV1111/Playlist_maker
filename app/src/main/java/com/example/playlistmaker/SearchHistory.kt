@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 
 class SearchHistory(
@@ -10,7 +12,7 @@ class SearchHistory(
 
     fun addTrackToHistory(track: Track, trackHistory: MutableList<Track>) {
         val indexDouble = trackHistory.indexOfFirst { it.trackId == track.trackId }
-        if (indexDouble > 0) trackHistory.removeAt(indexDouble)
+        if (indexDouble >= 0) trackHistory.removeAt(indexDouble)
         if (trackHistory.size >= TRACK_HISTORY_SIZE) trackHistory.removeLast()
         trackHistory.add(0, track)
     }

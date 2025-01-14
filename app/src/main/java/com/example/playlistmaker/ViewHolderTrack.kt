@@ -26,20 +26,13 @@ class ViewHolderTrack(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(data.artworkUrl100)
             .centerCrop()
             .placeholder(R.drawable.placeholder)
-            .transform(RoundedCorners(dpToPx(4.0F, itemView.context)))
+            .transform(RoundedCorners(data.dpToPx(4.0F, itemView.context)))
             .into(trackImageView)
 
         trackNameView.text = data.trackName
         artistNameView.text = data.artistName
         artistNameView.requestLayout()
         trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(data.trackTimeMillis)
-    }
-
-    private fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            context.resources.displayMetrics).toInt()
     }
 
 }

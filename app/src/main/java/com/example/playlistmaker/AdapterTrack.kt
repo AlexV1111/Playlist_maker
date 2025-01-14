@@ -20,6 +20,8 @@ class AdapterTrack(
 
     override fun onBindViewHolder(holder: ViewHolderTrack, position: Int) {
         holder.bind(listTrack[position])
-        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(listTrack[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(listTrack[holder.adapterPosition])
+        }
     }
 }
