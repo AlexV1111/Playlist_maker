@@ -1,67 +1,138 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.TypedValue
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.databinding.AudioplayerBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayer : AppCompatActivity() {
 
-    private lateinit var imageArtWorkView: ImageView
-    private lateinit var trackNameView: TextView
-    private lateinit var artistNameView: TextView
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val DELAY = 500L
+    }
 
-    private lateinit var trackTimeView: TextView
-    private lateinit var collectionNameView: TextView
-    private lateinit var releaseDateView: TextView
-    private lateinit var primaryGenreNameView: TextView
-    private lateinit var countryView: TextView
+
+    private var playerState = STATE_DEFAULT
+    private var mediaPlayer = MediaPlayer()
+
+    private lateinit var playBtn: ImageButton
+    private lateinit var currentTrackTime: TextView
+    private lateinit var mainThreadHandler: Handler
+    private lateinit var timeRunnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.audioplayer)
 
-        val audioPlayerBackButton = findViewById<ImageButton>(R.id.audioPlayerBackBtn)
-        audioPlayerBackButton.setOnClickListener { finish() }
+        mainThreadHandler = Handler(Looper.getMainLooper())
+
+        val binding = AudioplayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.audioPlayerBackBtn.setOnClickListener { finish() }
 
         val track = intent.getParcelableExtra<Track>(Track::class.simpleName)
 
-
-
-        imageArtWorkView = findViewById(R.id.imageArtWork)
-        trackNameView = findViewById(R.id.trackName)
-        artistNameView = findViewById(R.id.artistName)
-        trackTimeView = findViewById(R.id.trackTime)
-        collectionNameView = findViewById(R.id.collectionName)
-        releaseDateView = findViewById(R.id.releaseDate)
-        primaryGenreNameView = findViewById(R.id.primaryGenreName)
-        countryView = findViewById(R.id.country)
-
-
         if (track != null) {
-            Glide.with(imageArtWorkView)
+
+            track.previewUrl?.let { preparePlayer(track.previewUrl) }
+            timeRunnable = timer()
+
+
+
+            Glide.with(binding.imageArtWork)
                 .load(track.getCoverArtwork())
                 .centerCrop()
                 .placeholder(R.drawable.placeholder)
-                .transform(RoundedCorners(track.dpToPx(8.0F, imageArtWorkView.context)))
-                .into(imageArtWorkView)
+                .transform(RoundedCorners(track.dpToPx(8.0F, binding.imageArtWork.context)))
+                .into(binding.imageArtWork)
         }
 
-        trackNameView.text = track?.trackName
-        artistNameView.text = track?.artistName
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track?.trackTimeMillis)
-        collectionNameView.text = track?.collectionName
-        releaseDateView.text = track?.getYearFromReleaseDate()
-        primaryGenreNameView.text = track?.primaryGenreName
-        countryView.text = track?.country
+        binding.trackName.text = track?.trackName
+        binding.artistName.text = track?.artistName
+        binding.trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track?.trackTimeMillis)
+        binding.collectionName.text = track?.collectionName
+        binding.releaseDate.text = track?.getYearFromReleaseDate()
+        binding.primaryGenreName.text = track?.primaryGenreName
+        binding.country.text = track?.country
 
+        playBtn = findViewById(R.id.playBtn)
+        playBtn.setOnClickListener { playbackControl() }
+
+        currentTrackTime = findViewById(R.id.currentTrackTime)
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainThreadHandler.removeCallbacks(timeRunnable)
+        mediaPlayer.release()
+    }
+
+    private fun playbackControl() {
+        when(playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    private fun preparePlayer(url: String) {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playBtn.setImageResource(R.drawable.play_btn)
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playBtn.setImageResource(R.drawable.play_btn)
+            mainThreadHandler.removeCallbacks(timeRunnable)
+            playerState = STATE_PREPARED
+            currentTrackTime.text = getString(R.string.start_time)
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playBtn.setImageResource(R.drawable.pause_btn)
+        playerState = STATE_PLAYING
+        mainThreadHandler.postDelayed(timeRunnable, DELAY)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playBtn.setImageResource(R.drawable.play_btn)
+        playerState = STATE_PAUSED
+        mainThreadHandler.removeCallbacks(timeRunnable)
+    }
+
+    private fun timer(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                currentTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                mainThreadHandler.postDelayed(this, DELAY)
+            }
+        }
     }
 
 }
